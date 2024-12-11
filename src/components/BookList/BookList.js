@@ -1,29 +1,40 @@
 import { useSelector, useDispatch } from 'react-redux'
 import { BsBookmarkStarFill, BsBookmarkStar } from 'react-icons/bs'
 
-import { deleteBook, toggleFavorite, selectBooks } from '../../redux/slices/booksSlice'
-import { selectTitleFilter, selectAuthorFilter, selectOnlyFavoriteFilter } from '../../redux/slices/filterSlice'
+import {
+	deleteBook,
+	toggleFavorite,
+	selectBooks,
+} from '../../redux/slices/booksSlice'
+import {
+	selectTitleFilter,
+	selectAuthorFilter,
+	selectOnlyFavoriteFilter,
+} from '../../redux/slices/filterSlice'
 import './BookList.css'
 
-
 const BookList = () => {
-  const books = useSelector(selectBooks)
+	const books = useSelector(selectBooks)
 	const titleFilter = useSelector(selectTitleFilter)
 	const authorFilter = useSelector(selectAuthorFilter)
 	const onlyFavoriteFilter = useSelector(selectOnlyFavoriteFilter)
-  const dispatch = useDispatch()
+	const dispatch = useDispatch()
 
-  const handleDelete = (id) => {
-    dispatch(deleteBook(id))
-  }
+	const handleDelete = id => {
+		dispatch(deleteBook(id))
+	}
 
-const handleToggleFavorite = (id) => {
-    dispatch(toggleFavorite(id))
-  }
+	const handleToggleFavorite = id => {
+		dispatch(toggleFavorite(id))
+	}
 
-	const filteredBooks = books.filter((book) => {
-		const matchesTitle = book.title.toLowerCase().includes(titleFilter.toLowerCase())
-		const matchesAuthor = book.author.toLowerCase().includes(authorFilter.toLowerCase())
+	const filteredBooks = books.filter(book => {
+		const matchesTitle = book.title
+			.toLowerCase()
+			.includes(titleFilter.toLowerCase())
+		const matchesAuthor = book.author
+			.toLowerCase()
+			.includes(authorFilter.toLowerCase())
 		const matchesFavorite = onlyFavoriteFilter ? book.isFavorite : true
 		return matchesTitle && matchesAuthor && matchesFavorite
 	})
@@ -34,18 +45,17 @@ const handleToggleFavorite = (id) => {
 		const regex = new RegExp(`(${filter})`, 'gi')
 		return text.split(regex).map((substring, i) => {
 			if (substring.toLowerCase() === filter.toLowerCase()) {
-				return (<span key={i} className='highlight'>
-					{substring}
-				</span>
-		)
+				return (
+					<span key={i} className='highlight'>
+						{substring}
+					</span>
+				)
 			}
 			return substring
 		})
-			
-		}
+	}
 
-
-  return (
+	return (
 		<div className='app-block book-list'>
 			<h2>Book List</h2>
 			{books.length === 0 ? (
@@ -56,7 +66,8 @@ const handleToggleFavorite = (id) => {
 						<li key={book.id}>
 							<div className='book-info'>
 								{++i}. {highlightMatch(book.title, titleFilter)} by{' '}
-								<strong>{highlightMatch(book.author, authorFilter)}</strong>
+								<strong>{highlightMatch(book.author, authorFilter)}</strong> 
+								{' '}({book.source})
 							</div>
 							<div className='book-actions'>
 								<span onClick={() => handleToggleFavorite(book.id)}>
