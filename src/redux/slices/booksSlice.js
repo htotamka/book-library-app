@@ -14,7 +14,7 @@ export const fetchBook = createAsyncThunk(
 			return res.data
 		} catch (error) {
 			thunkAPI.dispatch(setError(error.message))
-      throw error
+			throw error
 		}
 	}
 )
@@ -37,6 +37,7 @@ const booksSlice = createSlice({
 			})
 		},
 	},
+	
 	extraReducers: builder => {
 		builder.addCase(fetchBook.fulfilled, (state, action) => {
 			if (action.payload.title && action.payload.author) {
